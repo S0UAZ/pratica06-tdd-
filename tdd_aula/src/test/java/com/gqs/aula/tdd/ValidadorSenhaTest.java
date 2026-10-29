@@ -59,4 +59,12 @@ public class ValidadorSenhaTest {
         assertTrue(resultado.isValida());
         assertTrue(resultado.getErros().isEmpty());
     }
+
+    // Ciclo 6 - senha nula
+    @Test
+    void deveTratarSenhaNulaComoInvalida() {
+        ResultadoValidacao resultado = validador.validar(null);
+        assertFalse(resultado.isValida());
+        assertEquals(4, resultado.getErros().size());
+    }
 }
