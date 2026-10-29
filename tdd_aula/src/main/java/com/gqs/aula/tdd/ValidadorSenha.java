@@ -16,6 +16,9 @@ public class ValidadorSenha {
         if (!temMaiuscula(senha)) {
             erros.add("A senha deve conter pelo menos uma letra maiuscula");
         }
+        if (!temCaractereEspecial(senha)) {
+            erros.add("A senha deve conter pelo menos um caractere especial");
+        }
         return new ResultadoValidacao(erros);
     }
 
@@ -32,6 +35,15 @@ public class ValidadorSenha {
     private boolean temMaiuscula(String senha) {
         for (char c : senha.toCharArray()) {
             if (Character.isUpperCase(c)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean temCaractereEspecial(String senha) {
+        for (char c : senha.toCharArray()) {
+            if (!Character.isLetterOrDigit(c) && !Character.isWhitespace(c)) {
                 return true;
             }
         }
