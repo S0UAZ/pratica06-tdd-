@@ -32,4 +32,12 @@ public class ValidadorSenhaTest {
         assertFalse(resultado.isValida());
         assertEquals(Arrays.asList("A senha deve conter pelo menos uma letra maiuscula"), resultado.getErros());
     }
+
+    // Ciclo 4 - pelo menos um caractere especial
+    @Test
+    void deveRejeitarSenhaSemCaractereEspecial() {
+        ResultadoValidacao resultado = validador.validar("Abcdef12");
+        assertFalse(resultado.isValida());
+        assertEquals(Arrays.asList("A senha deve conter pelo menos um caractere especial"), resultado.getErros());
+    }
 }
