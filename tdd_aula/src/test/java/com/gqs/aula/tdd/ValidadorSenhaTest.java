@@ -1,56 +1,54 @@
 package com.gqs.aula.tdd;
 
+import static com.gqs.aula.tdd.ValidadorSenha.ERRO_DIGITOS;
+import static com.gqs.aula.tdd.ValidadorSenha.ERRO_ESPECIAL;
+import static com.gqs.aula.tdd.ValidadorSenha.ERRO_MAIUSCULA;
+import static com.gqs.aula.tdd.ValidadorSenha.ERRO_TAMANHO;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
 public class ValidadorSenhaTest {
 
     private final ValidadorSenha validador = new ValidadorSenha();
 
+    private void assertInvalida(String senha, String... errosEsperados) {
+        ResultadoValidacao resultado = validador.validar(senha);
+        assertFalse(resultado.isValida());
+        List<String> esperado = Arrays.asList(errosEsperados);
+        assertEquals(esperado, resultado.getErros());
+    }
+
     // Ciclo 1 - tamanho minimo
     @Test
     void deveRejeitarSenhaComMenosDe8Caracteres() {
-        ResultadoValidacao resultado = validador.validar("Ab12!cd");
-        assertFalse(resultado.isValida());
-        assertEquals(Arrays.asList("A senha deve ter pelo menos 8 caracteres"), resultado.getErros());
+        assertInvalida("Ab12!cd", ERRO_TAMANHO);
     }
 
     // Ciclo 2 - pelo menos 2 digitos
     @Test
     void deveRejeitarSenhaComMenosDe2Digitos() {
-        ResultadoValidacao resultado = validador.validar("Abcdefg1!");
-        assertFalse(resultado.isValida());
-        assertEquals(Arrays.asList("A senha deve conter pelo menos 2 dígitos"), resultado.getErros());
+        assertInvalida("Abcdefg1!", ERRO_DIGITOS);
     }
 
     // Ciclo 3 - pelo menos uma letra maiuscula
     @Test
     void deveRejeitarSenhaSemLetraMaiuscula() {
-        ResultadoValidacao resultado = validador.validar("abcdef12!");
-        assertFalse(resultado.isValida());
-        assertEquals(Arrays.asList("A senha deve conter pelo menos uma letra maiuscula"), resultado.getErros());
+        assertInvalida("abcdef12!", ERRO_MAIUSCULA);
     }
 
     // Ciclo 4 - pelo menos um caractere especial
     @Test
     void deveRejeitarSenhaSemCaractereEspecial() {
-        ResultadoValidacao resultado = validador.validar("Abcdef12");
-        assertFalse(resultado.isValida());
-        assertEquals(Arrays.asList("A senha deve conter pelo menos um caractere especial"), resultado.getErros());
+        assertInvalida("Abcdef12", ERRO_ESPECIAL);
     }
 
     // Ciclo 5 - multiplos erros e senha valida
     @Test
     void deveRetornarTodosOsErrosParaMypass() {
-        ResultadoValidacao resultado = validador.validar("mypass");
-        assertFalse(resultado.isValida());
-        assertEquals(Arrays.asList(
-                "A senha deve ter pelo menos 8 caracteres",
-                "A senha deve conter pelo menos 2 dígitos",
-                "A senha deve conter pelo menos uma letra maiuscula",
-                "A senha deve conter pelo menos um caractere especial"), resultado.getErros());
+        assertInvalida("mypass", ERRO_TAMANHO, ERRO_DIGITOS, ERRO_MAIUSCULA, ERRO_ESPECIAL);
     }
 
     @Test
@@ -63,8 +61,6 @@ public class ValidadorSenhaTest {
     // Ciclo 6 - senha nula
     @Test
     void deveTratarSenhaNulaComoInvalida() {
-        ResultadoValidacao resultado = validador.validar(null);
-        assertFalse(resultado.isValida());
-        assertEquals(4, resultado.getErros().size());
+        assertInvalida(null, ERRO_TAMANHO, ERRO_DIGITOS, ERRO_MAIUSCULA, ERRO_ESPECIAL);
     }
 }
