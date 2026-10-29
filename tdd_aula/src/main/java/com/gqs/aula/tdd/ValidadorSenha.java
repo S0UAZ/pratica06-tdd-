@@ -13,6 +13,9 @@ public class ValidadorSenha {
         if (contarDigitos(senha) < 2) {
             erros.add("A senha deve conter pelo menos 2 dígitos");
         }
+        if (!temMaiuscula(senha)) {
+            erros.add("A senha deve conter pelo menos uma letra maiuscula");
+        }
         return new ResultadoValidacao(erros);
     }
 
@@ -24,5 +27,14 @@ public class ValidadorSenha {
             }
         }
         return digitos;
+    }
+
+    private boolean temMaiuscula(String senha) {
+        for (char c : senha.toCharArray()) {
+            if (Character.isUpperCase(c)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
