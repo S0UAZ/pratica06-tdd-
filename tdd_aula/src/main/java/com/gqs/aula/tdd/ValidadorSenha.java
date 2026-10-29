@@ -10,6 +10,15 @@ public class ValidadorSenha {
         if (senha.length() < 8) {
             erros.add("A senha deve ter pelo menos 8 caracteres");
         }
+        int digitos = 0;
+        for (char c : senha.toCharArray()) {
+            if (Character.isDigit(c)) {
+                digitos++;
+            }
+        }
+        if (digitos < 2) {
+            erros.add("A senha deve conter pelo menos 2 dígitos");
+        }
         return new ResultadoValidacao(erros);
     }
 }
